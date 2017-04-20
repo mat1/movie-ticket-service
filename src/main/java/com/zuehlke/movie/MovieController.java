@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+@RequestMapping("/api/v1/")
 @Controller
 public class MovieController {
 
-    @RequestMapping("/movies")
+    @RequestMapping(value = "/movies", method = GET)
     @ResponseBody
     public List<Movie> getMovies() {
         return asList(
@@ -21,7 +23,7 @@ public class MovieController {
         );
     }
 
-    @RequestMapping("/movies/{id}")
+    @RequestMapping(value = "/movies/{id}", method = GET)
     @ResponseBody
     public MovieDetail getMovieById() {
         return new MovieDetail(1,
