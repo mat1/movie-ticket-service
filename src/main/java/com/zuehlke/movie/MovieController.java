@@ -1,5 +1,6 @@
 package com.zuehlke.movie;
 
+import com.zuehlke.movie.movieservice.MovieServiceAdapter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,14 +15,12 @@ import static java.util.Arrays.asList;
 @Controller
 public class MovieController {
 
+    private final MovieServiceAdapter movieServiceAdapter = new MovieServiceAdapter("https://movie-service.herokuapp.com/");
+
     @GetMapping("/movies")
     @ResponseBody
     public List<Movie> getMovies() {
-        return asList(
-                new Movie(1, "Batman Begins", "https://images-na.ssl-images-amazon.com/images/M/MV5BNTM3OTc0MzM2OV5BMl5BanBnXkFtZTYwNzUwMTI3._V1_SX300.jpg"),
-                new Movie(2, "Ted", "https://images-na.ssl-images-amazon.com/images/M/MV5BMTQ1OTU0ODcxMV5BMl5BanBnXkFtZTcwOTMxNTUwOA@@._V1_SX300.jpg"),
-                new Movie(3, "Inception", "https://images-na.ssl-images-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg")
-        );
+        return movieServiceAdapter.getAll();
     }
 
     @GetMapping("/movies/{id}")
