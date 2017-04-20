@@ -1,19 +1,20 @@
 package com.zuehlke.movie;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RequestMapping("/api/v1/")
 @Controller
 public class MovieController {
 
-    @RequestMapping(value = "/movies", method = GET)
+    @GetMapping("/movies")
     @ResponseBody
     public List<Movie> getMovies() {
         return asList(
@@ -23,9 +24,9 @@ public class MovieController {
         );
     }
 
-    @RequestMapping(value = "/movies/{id}", method = GET)
+    @GetMapping("/movies/{id}")
     @ResponseBody
-    public MovieDetail getMovieById() {
+    public MovieDetail getMovieById(@PathVariable("id") long id) {
         return new MovieDetail(1,
                 "Batman Begins",
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BNTM3OTc0MzM2OV5BMl5BanBnXkFtZTYwNzUwMTI3._V1_SX300.jpg",
