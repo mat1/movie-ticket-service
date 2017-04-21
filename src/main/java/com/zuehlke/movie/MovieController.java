@@ -1,6 +1,7 @@
 package com.zuehlke.movie;
 
 import com.zuehlke.movie.movieservice.MovieServiceAdapter;
+import com.zuehlke.movie.rating.RatingAdapter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import static java.util.Arrays.asList;
 public class MovieController {
 
     private final MovieServiceAdapter movieServiceAdapter = new MovieServiceAdapter("https://movie-service.herokuapp.com/");
+    private final RatingAdapter ratingAdapter = new RatingAdapter("https://movie-rating-service.herokuapp.com/");
 
     @GetMapping("/movies")
     @ResponseBody

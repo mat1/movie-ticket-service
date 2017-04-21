@@ -10,6 +10,11 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 
 public class MovieServiceAdapterIT {
+
+    static {
+        System.setProperty("hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", "5000");
+    }
+
     @Test
     public void getAll() throws Exception {
         MovieServiceAdapter movieServiceAdapter = new MovieServiceAdapter("https://movie-service.herokuapp.com/");
