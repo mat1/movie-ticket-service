@@ -15,8 +15,13 @@ import java.util.Optional;
 @Controller
 public class MovieController {
 
-    private final MovieServiceAdapter movieServiceAdapter = new MovieServiceAdapter("https://movie-service.herokuapp.com/");
-    private final RatingAdapter ratingAdapter = new RatingAdapter("https://movie-rating-service.herokuapp.com/");
+    private final MovieServiceAdapter movieServiceAdapter;
+    private final RatingAdapter ratingAdapter;
+
+    public MovieController(MovieServiceAdapter movieServiceAdapter, RatingAdapter ratingAdapter) {
+        this.movieServiceAdapter = movieServiceAdapter;
+        this.ratingAdapter = ratingAdapter;
+    }
 
     @GetMapping("/movies")
     @ResponseBody
