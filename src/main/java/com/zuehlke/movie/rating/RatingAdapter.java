@@ -5,6 +5,7 @@ import com.zuehlke.movie.util.RestClientFactory;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public class RatingAdapter {
@@ -12,7 +13,8 @@ public class RatingAdapter {
     private final RatingApiClient ratingApiClient;
 
     public RatingAdapter(String url) {
-        ratingApiClient = RestClientFactory.createClient(url, RatingApiClient.class);
+        RatingApiClient fallback = (id) -> emptyList();
+        ratingApiClient = RestClientFactory.createClientWithFallback(url, RatingApiClient.class, fallback);
     }
 
     public List<Rating> getRatingsById(long id) {
