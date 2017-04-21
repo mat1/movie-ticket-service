@@ -15,7 +15,7 @@ public class RatingAdapter {
         ratingApiClient = RestClientFactory.createClient(url, RatingApiClient.class);
     }
 
-    List<Rating> getRatingsById(long id) {
+    public List<Rating> getRatingsById(long id) {
         List<RatingResponse> ratings = ratingApiClient.getRatingsById(id);
 
         return ratings.stream()

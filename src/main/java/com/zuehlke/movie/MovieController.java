@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-
-import static java.util.Arrays.asList;
+import java.util.Optional;
 
 @RequestMapping("/api/v1/")
 @Controller
@@ -28,12 +27,10 @@ public class MovieController {
     @GetMapping("/movies/{id}")
     @ResponseBody
     public MovieDetail getMovieById(@PathVariable("id") long id) {
-        return new MovieDetail(1,
-                "Batman Begins",
-                "https://images-na.ssl-images-amazon.com/images/M/MV5BNTM3OTc0MzM2OV5BMl5BanBnXkFtZTYwNzUwMTI3._V1_SX300.jpg",
-                "After training with his mentor, Batman begins his fight to free crime-ridden Gotham City from the corruption that Scarecrow and the League of Shadows have cast upon it.",
-                2005,
-                "Action",
-                asList(new Rating("Internet Movie Database", "8.3/10"), new Rating("Rotten Tomatoes", "84%")));
+        Optional<MovieDetail> movieDetail = movieServiceAdapter.getMovieById(id);
+        List<Rating> ratings = ratingAdapter.getRatingsById(id);
+
+        return movieDetail.map(m -> m.setRatings(ratings))
+                .orElseThrow(() -> new MovieNotFoundException("No movie found with id=" + id));
     }
 }
