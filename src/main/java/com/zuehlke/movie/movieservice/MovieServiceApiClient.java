@@ -11,4 +11,7 @@ public interface MovieServiceApiClient {
 
     @RequestLine("GET /api/v1/movies/{id}")
     MovieServiceResponse getMovieById(@Param("id") long id);
+
+    @RequestLine("GET /health")
+    void getHealthStatus();
 }

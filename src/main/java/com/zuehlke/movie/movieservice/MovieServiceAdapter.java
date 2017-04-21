@@ -6,18 +6,22 @@ import com.zuehlke.movie.MovieDetail;
 import com.zuehlke.movie.util.RestClientFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
 
 import java.util.List;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
-public class MovieServiceAdapter {
+public class MovieServiceAdapter implements HealthIndicator {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final String url;
     private final MovieServiceApiClient moviesApiClient;
 
     public MovieServiceAdapter(String url) {
+        this.url = url;
         moviesApiClient = RestClientFactory.createClient(url, MovieServiceApiClient.class);
     }
 
@@ -38,5 +42,23 @@ public class MovieServiceAdapter {
             logger.warn("Error in get movie with id={}.", id, ex);
         }
         return Optional.empty();
+    }
+
+    /**
+     * Set management.security.enabled=false to see more details
+     */
+    @Override
+    public Health health() {
+        try {
+            moviesApiClient.getHealthStatus();
+
+            return Health.up()
+                    .withDetail("Endpoint", url)
+                    .build();
+        } catch (Exception ex) {
+            return Health.down()
+                    .withDetail("Endpoint", url)
+                    .build();
+        }
     }
 }
