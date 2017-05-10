@@ -47,9 +47,9 @@
             <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.netflix.feign</groupId>
+            <groupId>io.github.openfeign</groupId>
             <artifactId>feign-jackson</artifactId>
-            <version>8.18.0</version>
+            <version>9.5.0</version>
         </dependency>
 
         <!-- Hystrix Dashboard and Spring Actuator -->
