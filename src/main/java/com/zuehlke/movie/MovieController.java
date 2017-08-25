@@ -3,14 +3,12 @@ package com.zuehlke.movie;
 import com.zuehlke.movie.movieservice.MovieServiceAdapter;
 import com.zuehlke.movie.rating.RatingAdapter;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:8000")
 @RequestMapping("/api/v1/")
 @Controller
 public class MovieController {

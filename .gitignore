@@ -1,4 +1,5 @@
 target/
+ui/elm-stuff/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
