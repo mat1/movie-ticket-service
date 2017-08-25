@@ -7,9 +7,40 @@ h1 {
   color: #e50914;
 }
 
+.bg-dark {
+  background-color: #141414!important;
+}
+
+#logo {
+  color: #e50914;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0
+  }
+  100% {
+    opacity: 1
+  }
+}
+
+.movie {
+  position: inherit;
+  width: 300px;
+  margin: 5px;
+}
+
 .poster {
   object-fit: cover;
   width: 300px;
   height: 400px;
-  margin: 5px;
+}
+
+.movie-details {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fade 0.3s linear;
 }

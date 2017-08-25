@@ -13075,6 +13075,46 @@ var _elm_lang$http$Http$stringPart = _elm_lang$http$Http$StringPart;
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
+var _user$project$Main$emptyNode = _elm_lang$html$Html$text('');
+var _user$project$Main$viewMovieDetail = F2(
+	function (movieDetail, selectedId) {
+		var _p0 = movieDetail;
+		if (_p0.ctor === 'Nothing') {
+			return _user$project$Main$emptyNode;
+		} else {
+			var _p1 = _p0._0;
+			return _elm_lang$core$Native_Utils.eq(_p1.id, selectedId) ? A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('movie-details'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h4,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(_p1.title),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$span,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(_p1.plot),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}) : _user$project$Main$emptyNode;
+		}
+	});
 var _user$project$Main$filterMovies = F2(
 	function (title, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -13150,18 +13190,18 @@ var _user$project$Main$loadMovie = function (id) {
 };
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
+		var _p2 = msg;
+		switch (_p2.ctor) {
 			case 'ShowDetails':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'LoadMovies':
-				if (_p0._0.ctor === 'Ok') {
-					var _p1 = _p0._0._0;
+				if (_p2._0.ctor === 'Ok') {
+					var _p3 = _p2._0._0;
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{loadedMovies: _p1, movies: _p1}),
+							{loadedMovies: _p3, movies: _p3}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				} else {
@@ -13171,7 +13211,7 @@ var _user$project$Main$update = F2(
 							model,
 							{
 								loadingError: _elm_lang$core$Maybe$Just(
-									_elm_lang$core$Basics$toString(_p0._0._0))
+									_elm_lang$core$Basics$toString(_p2._0._0))
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
@@ -13179,23 +13219,23 @@ var _user$project$Main$update = F2(
 			case 'FilterMovies':
 				return {
 					ctor: '_Tuple2',
-					_0: A2(_user$project$Main$filterMovies, _p0._0, model),
+					_0: A2(_user$project$Main$filterMovies, _p2._0, model),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'SelectMovie':
 				return {
 					ctor: '_Tuple2',
 					_0: model,
-					_1: _user$project$Main$loadMovie(_p0._0)
+					_1: _user$project$Main$loadMovie(_p2._0)
 				};
 			default:
-				if (_p0._0.ctor === 'Ok') {
+				if (_p2._0.ctor === 'Ok') {
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
 							{
-								selectedMovie: _elm_lang$core$Maybe$Just(_p0._0._0)
+								selectedMovie: _elm_lang$core$Maybe$Just(_p2._0._0)
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
@@ -13207,36 +13247,52 @@ var _user$project$Main$update = F2(
 var _user$project$Main$SelectMovie = function (a) {
 	return {ctor: 'SelectMovie', _0: a};
 };
-var _user$project$Main$viewMovie = function (movie) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('col'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$img,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('poster'),
-					_1: {
+var _user$project$Main$viewMovie = F2(
+	function (movieDetail, movie) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('col'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$src(movie.poster),
+						_0: _elm_lang$html$Html_Attributes$class('movie'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$img,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('poster'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$src(movie.poster),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onMouseOver(
+											_user$project$Main$SelectMovie(movie.id)),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{ctor: '[]'}),
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(
-								_user$project$Main$SelectMovie(movie.id)),
+							_0: A2(_user$project$Main$viewMovieDetail, movieDetail, movie.id),
 							_1: {ctor: '[]'}
 						}
-					}
-				},
-				{ctor: '[]'}),
-			_1: {ctor: '[]'}
-		});
-};
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
 var _user$project$Main$FilterMovies = function (a) {
 	return {ctor: 'FilterMovies', _0: a};
 };
@@ -13257,7 +13313,11 @@ var _user$project$Main$navbar = A2(
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$href('#'),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$id('logo'),
+						_1: {ctor: '[]'}
+					}
 				}
 			},
 			{
@@ -13325,15 +13385,18 @@ var _user$project$Main$view = function (model) {
 						_0: _elm_lang$html$Html_Attributes$class('row'),
 						_1: {ctor: '[]'}
 					},
-					A2(_elm_lang$core$List$map, _user$project$Main$viewMovie, model.movies)),
+					A2(
+						_elm_lang$core$List$map,
+						_user$project$Main$viewMovie(model.selectedMovie),
+						model.movies)),
 				_1: {ctor: '[]'}
 			}
 		});
 };
 var _user$project$Main$viewOrError = function (model) {
-	var _p2 = model.loadingError;
-	if (_p2.ctor === 'Just') {
-		return _elm_lang$html$Html$text(_p2._0);
+	var _p4 = model.loadingError;
+	if (_p4.ctor === 'Just') {
+		return _elm_lang$html$Html$text(_p4._0);
 	} else {
 		return _user$project$Main$view(model);
 	}

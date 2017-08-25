@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Html exposing (..)
-import Html.Events exposing (onClick, on, onInput)
+import Html.Events exposing (onClick, on, onInput, onMouseOver)
 import Http
 import Html.Attributes as Attr exposing (id, class, classList, src, name, type_, title, href, rel, attribute, placeholder)
 import Json.Decode exposing (string, int, list, Decoder, at)
@@ -141,20 +141,45 @@ view : Model -> Html Msg
 view model =
     div [ class "container-fluid" ]
         [ navbar
-        , div [ class "row" ] (List.map viewMovie model.movies)
+        , div [ class "row" ] (List.map (viewMovie model.selectedMovie) model.movies)
         ]
 
 
-viewMovie : Movie -> Html Msg
-viewMovie movie =
+viewMovie : Maybe MovieDetail -> Movie -> Html Msg
+viewMovie movieDetail movie =
     div [ class "col" ]
-        [ img [ class "poster", src movie.poster, onClick (SelectMovie movie.id) ] [] ]
+        [ div [ class "movie" ]
+            [ img [ class "poster", src movie.poster, onMouseOver (SelectMovie movie.id) ] []
+            , viewMovieDetail movieDetail movie.id
+            ]
+        ]
+
+
+emptyNode : Html Msg
+emptyNode =
+    text ""
+
+
+viewMovieDetail : Maybe MovieDetail -> Int -> Html Msg
+viewMovieDetail movieDetail selectedId =
+    case movieDetail of
+        Nothing ->
+            emptyNode
+
+        Just detail ->
+            if detail.id == selectedId then
+                div [ class "movie-details" ]
+                    [ h4 [] [ text detail.title ]
+                    , span [] [ text detail.plot ]
+                    ]
+            else
+                emptyNode
 
 
 navbar : Html Msg
 navbar =
     nav [ class "navbar navbar-dark bg-dark" ]
-        [ a [ class "navbar-brand", href "#" ] [ text "Movie Ticket Service" ]
+        [ a [ class "navbar-brand", href "#", id "logo" ] [ text "Movie Ticket Service" ]
         , form [ class "form-inline" ]
             [ input [ attribute "aria-label" "Search", class "form-control", placeholder "Search", type_ "text", onInput FilterMovies ] []
             ]
