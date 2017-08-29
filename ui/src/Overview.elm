@@ -2,10 +2,9 @@ module Overview exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (onClick, on, onInput, onMouseOver)
-import Http
 import Html.Attributes as Attr exposing (id, class, classList, src, name, type_, title, href, rel, attribute, placeholder)
-import Json.Decode exposing (string, int, list, Decoder, at)
-import Json.Decode.Pipeline exposing (decode, required, optional)
+import MovieApi exposing (..)
+import Http
 
 
 -- MODEL
@@ -19,60 +18,14 @@ type alias Model =
     }
 
 
-type alias Movie =
-    { id : Int
-    , poster : String
-    , title : String
-    }
-
-
-type alias MovieDetail =
-    { id : Int
-    , title : String
-    , plot : String
-    , genre : String
-    }
-
-
 init : ( Model, Cmd Msg )
 init =
-    ( initialModel, initialCmd )
+    ( initialModel, (MovieApi.loadMovies LoadMovies) )
 
 
 initialModel : Model
 initialModel =
     { movies = [], loadedMovies = [], loadingError = Nothing, selectedMovie = Nothing }
-
-
-initialCmd : Cmd Msg
-initialCmd =
-    list movieDecoder
-        |> Http.get "http://localhost:8080/api/v1/movies"
-        |> Http.send LoadMovies
-
-
-movieDecoder : Decoder Movie
-movieDecoder =
-    decode Movie
-        |> required "id" int
-        |> required "poster" string
-        |> required "title" string
-
-
-movieDetailDecoder : Decoder MovieDetail
-movieDetailDecoder =
-    decode MovieDetail
-        |> required "id" int
-        |> required "title" string
-        |> required "plot" string
-        |> required "genre" string
-
-
-loadMovie : Int -> Cmd Msg
-loadMovie id =
-    movieDetailDecoder
-        |> Http.get ("http://localhost:8080/api/v1/movies/" ++ (toString id))
-        |> Http.send LoadMovie
 
 
 
@@ -103,7 +56,7 @@ update msg model =
             ( filterMovies title model, Cmd.none )
 
         SelectMovie id ->
-            ( model, (loadMovie id) )
+            ( model, (MovieApi.loadMovie id LoadMovie) )
 
         LoadMovie (Ok movieDetail) ->
             ( { model | selectedMovie = Just movieDetail }, Cmd.none )
