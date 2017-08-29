@@ -14,6 +14,7 @@ type alias Movie =
 
 type alias MovieDetail =
     { id : Int
+    , poster : String
     , title : String
     , plot : String
     , genre : String
@@ -39,6 +40,7 @@ movieDetailDecoder : Decoder MovieDetail
 movieDetailDecoder =
     decode MovieDetail
         |> required "id" int
+        |> required "poster" string
         |> required "title" string
         |> required "plot" string
         |> required "genre" string

@@ -4,6 +4,7 @@ import Html exposing (..)
 import Navigation
 import Router
 import Overview
+import MovieDetail
 
 
 -- PROGRAM
@@ -42,11 +43,13 @@ subscriptions model =
 
 type Page
     = Overview Overview.Model
+    | MovieDetail MovieDetail.Model
 
 
 type Msg
     = OnLocationChange Navigation.Location
     | OverviewMsg Overview.Msg
+    | MovieDetailMsg MovieDetail.Msg
 
 
 type alias Model =
@@ -84,13 +87,15 @@ update msg model =
             in
                 ( { model | page = Overview updatedModel }, Cmd.map OverviewMsg cmd )
 
+        ( MovieDetailMsg movieDetailMsg, MovieDetail subModel ) ->
+            let
+                ( updatedModel, cmd ) =
+                    (MovieDetail.update movieDetailMsg subModel)
+            in
+                ( { model | page = MovieDetail updatedModel }, Cmd.map MovieDetailMsg cmd )
 
-
-{-
-   _ ->
-       ( Debug.log "No match !!" model, Cmd.none )
-
--}
+        _ ->
+            ( Debug.log "No match !!" model, Cmd.none )
 
 
 toPage : Router.Route -> ( Page, Cmd Msg )
@@ -104,7 +109,11 @@ toPage route =
                 ( Overview model, Cmd.map OverviewMsg cmd )
 
         Router.MovieDetail id ->
-            ( Overview Overview.initialModel, Cmd.map OverviewMsg Overview.initialCmd )
+            let
+                ( model, cmd ) =
+                    MovieDetail.init id
+            in
+                ( MovieDetail model, Cmd.map MovieDetailMsg cmd )
 
 
 
@@ -116,3 +125,6 @@ view model =
     case model.page of
         Overview subModel ->
             Overview.view subModel |> Html.map OverviewMsg
+
+        MovieDetail subModel ->
+            MovieDetail.view subModel |> Html.map MovieDetailMsg

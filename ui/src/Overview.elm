@@ -96,8 +96,10 @@ viewMovie : Maybe MovieDetail -> Movie -> Html Msg
 viewMovie movieDetail movie =
     div [ class "col" ]
         [ div [ class "movie" ]
-            [ img [ class "poster", src movie.poster, onMouseOver (SelectMovie movie.id) ] []
-            , viewMovieDetail movieDetail movie.id
+            [ a [ href ("#movie/" ++ (toString movie.id)) ]
+                [ img [ class "poster", src movie.poster, onMouseOver (SelectMovie movie.id) ] []
+                , viewMovieDetail movieDetail movie.id
+                ]
             ]
         ]
 
