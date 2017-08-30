@@ -51,7 +51,7 @@ view : Model -> Html Msg
 view model =
     div [ class "container-fluid" ]
         [ navbar
-        , div [ class "row" ] [ viewMovieDetail model.selectedMovie ]
+        , viewMovieDetail model.selectedMovie
         ]
 
 
@@ -67,12 +67,14 @@ viewMovieDetail movieDetail =
             emptyNode
 
         Just detail ->
-            div []
-                [ div [ class "col" ] [ img [ src detail.poster ] [] ]
-                , div [ class "col" ]
-                    [ div [ class "movie-details" ]
+            div [ class "row" ]
+                [ div [ class "col-md-auto" ] [ img [ src detail.poster ] [] ]
+                , div [ class "col col-md-6" ]
+                    [ div [ class "movie-text" ]
                         [ h4 [] [ text detail.title ]
-                        , span [] [ text detail.plot ]
+                        , h6 [] [ text (detail.genre ++ " - " ++ (toString detail.year)) ]
+                        , p [] [ text detail.plot ]
+                        , span [] [ button [ type_ "button", class "btn btn-dark" ] [ text "Book Ticket" ] ]
                         ]
                     ]
                 ]

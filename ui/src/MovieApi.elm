@@ -18,6 +18,7 @@ type alias MovieDetail =
     , title : String
     , plot : String
     , genre : String
+    , year : Int
     }
 
 
@@ -44,6 +45,7 @@ movieDetailDecoder =
         |> required "title" string
         |> required "plot" string
         |> required "genre" string
+        |> required "year" int
 
 
 loadMovie : Int -> (Result Http.Error MovieDetail -> msg) -> Cmd msg
