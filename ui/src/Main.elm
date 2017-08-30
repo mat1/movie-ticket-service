@@ -25,11 +25,8 @@ init location =
     let
         currentRoute =
             Router.parseLocation location
-
-        ( newPage, cmd ) =
-            toPage currentRoute
     in
-        ( initialModel newPage, cmd )
+        getPage currentRoute
 
 
 subscriptions : Model -> Sub Msg
@@ -57,63 +54,54 @@ type alias Model =
     }
 
 
-initialModel : Page -> Model
-initialModel page =
-    { page = page
-    }
-
-
 
 -- UPDATE
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case ( msg, model.page ) of
-        ( OnLocationChange location, _ ) ->
+    let
+        toPage toModel toMsg subUpdate subMsg subModel =
             let
-                newRoute =
-                    Router.parseLocation location
-
-                ( newPage, cmd ) =
-                    toPage newRoute
+                ( newModel, newCmd ) =
+                    subUpdate subMsg subModel
             in
-                ( { model | page = newPage }, cmd )
+                ( { model | page = toModel newModel }, Cmd.map toMsg newCmd )
+    in
+        case ( msg, model.page ) of
+            ( OnLocationChange location, _ ) ->
+                let
+                    newRoute =
+                        Router.parseLocation location
+                in
+                    getPage newRoute
 
-        ( OverviewMsg overviewMsg, Overview subModel ) ->
+            ( OverviewMsg subMsg, Overview subModel ) ->
+                toPage Overview OverviewMsg Overview.update subMsg subModel
+
+            ( MovieDetailMsg subMsg, MovieDetail subModel ) ->
+                toPage MovieDetail MovieDetailMsg MovieDetail.update subMsg subModel
+
+            _ ->
+                ( Debug.log "No match !!" model, Cmd.none )
+
+
+getPage : Router.Route -> ( Model, Cmd Msg )
+getPage route =
+    let
+        toPage toModel toMsg initPage =
             let
-                ( updatedModel, cmd ) =
-                    (Overview.update overviewMsg subModel)
+                ( newModel, newCmd ) =
+                    initPage
             in
-                ( { model | page = Overview updatedModel }, Cmd.map OverviewMsg cmd )
+                ( Model (toModel newModel), Cmd.map toMsg newCmd )
+    in
+        case route of
+            Router.Overview ->
+                toPage Overview OverviewMsg Overview.init
 
-        ( MovieDetailMsg movieDetailMsg, MovieDetail subModel ) ->
-            let
-                ( updatedModel, cmd ) =
-                    (MovieDetail.update movieDetailMsg subModel)
-            in
-                ( { model | page = MovieDetail updatedModel }, Cmd.map MovieDetailMsg cmd )
-
-        _ ->
-            ( Debug.log "No match !!" model, Cmd.none )
-
-
-toPage : Router.Route -> ( Page, Cmd Msg )
-toPage route =
-    case route of
-        Router.Overview ->
-            let
-                ( model, cmd ) =
-                    Overview.init
-            in
-                ( Overview model, Cmd.map OverviewMsg cmd )
-
-        Router.MovieDetail id ->
-            let
-                ( model, cmd ) =
-                    MovieDetail.init id
-            in
-                ( MovieDetail model, Cmd.map MovieDetailMsg cmd )
+            Router.MovieDetail id ->
+                toPage MovieDetail MovieDetailMsg (MovieDetail.init id)
 
 
 
