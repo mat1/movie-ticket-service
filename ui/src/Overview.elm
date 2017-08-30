@@ -5,6 +5,7 @@ import Html.Events exposing (onClick, on, onInput, onMouseOver)
 import Html.Attributes as Attr exposing (id, class, classList, src, name, type_, title, href, rel, attribute, placeholder)
 import MovieApi exposing (..)
 import Http
+import Navbar
 
 
 -- MODEL
@@ -87,7 +88,7 @@ viewOrError model =
 view : Model -> Html Msg
 view model =
     div [ class "container-fluid" ]
-        [ navbar
+        [ Navbar.navbar (Just FilterMovies)
         , div [ class "row" ] (List.map (viewMovie model.selectedMovie) model.movies)
         ]
 
@@ -123,16 +124,6 @@ viewMovieDetail movieDetail selectedId =
                     ]
             else
                 emptyNode
-
-
-navbar : Html Msg
-navbar =
-    nav [ class "navbar navbar-dark bg-dark" ]
-        [ a [ class "navbar-brand", href "#", id "logo" ] [ text "Movie Ticket Service" ]
-        , form [ class "form-inline" ]
-            [ input [ attribute "aria-label" "Search", class "form-control", placeholder "Search", type_ "text", onInput FilterMovies ] []
-            ]
-        ]
 
 
 

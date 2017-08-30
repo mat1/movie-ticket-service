@@ -3,8 +3,8 @@ module MovieDetail exposing (..)
 import MovieApi exposing (..)
 import Http
 import Html exposing (..)
-import Html.Events exposing (onClick, on, onInput, onMouseOver)
 import Html.Attributes as Attr exposing (id, class, classList, src, name, type_, title, href, rel, attribute, placeholder)
+import Navbar
 
 
 -- MODEL
@@ -50,7 +50,7 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div [ class "container-fluid" ]
-        [ navbar
+        [ Navbar.navbar Nothing
         , viewMovieDetail model.selectedMovie
         ]
 
