@@ -34,30 +34,26 @@ initialModel =
 
 
 type Msg
-    = ShowDetails
-    | LoadMovies (Result Http.Error (List Movie))
-    | FilterMovies String
+    = FilterMovies String
     | SelectMovie Int
+    | LoadMovies (Result Http.Error (List Movie))
     | LoadMovie (Result Http.Error MovieDetail)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        ShowDetails ->
-            ( model, Cmd.none )
+        FilterMovies title ->
+            ( filterMovies title model, Cmd.none )
+
+        SelectMovie id ->
+            ( model, (MovieApi.loadMovie id LoadMovie) )
 
         LoadMovies (Ok movies) ->
             ( { model | loadedMovies = movies, movies = movies }, Cmd.none )
 
         LoadMovies (Err err) ->
             ( { model | loadingError = Just (toString err) }, Cmd.none )
-
-        FilterMovies title ->
-            ( filterMovies title model, Cmd.none )
-
-        SelectMovie id ->
-            ( model, (MovieApi.loadMovie id LoadMovie) )
 
         LoadMovie (Ok movieDetail) ->
             ( { model | selectedMovie = Just movieDetail }, Cmd.none )
