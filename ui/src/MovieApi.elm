@@ -25,7 +25,7 @@ type alias MovieDetail =
 loadMovies : (Result Http.Error (List Movie) -> msg) -> Cmd msg
 loadMovies msg =
     list movieDecoder
-        |> Http.get "http://localhost:8080/api/v1/movies"
+        |> Http.get "/api/v1/movies"
         |> Http.send msg
 
 
@@ -51,5 +51,5 @@ movieDetailDecoder =
 loadMovie : Int -> (Result Http.Error MovieDetail -> msg) -> Cmd msg
 loadMovie id msg =
     movieDetailDecoder
-        |> Http.get ("http://localhost:8080/api/v1/movies/" ++ (toString id))
+        |> Http.get ("/api/v1/movies/" ++ (toString id))
         |> Http.send msg
